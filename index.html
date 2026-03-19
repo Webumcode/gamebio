@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>guns.lol — Profesionální Link in Bio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..900&display=swap" rel="stylesheet">
-    <!-- Přidáme Supabase JS knihovnu -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Supabase JS knihovna - načtená správně -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
     <style>
-        /* Váš stávající CSS zůstává stejný */
+        /* ... (stejné CSS jako předtím, ponechte ho beze změny) ... */
         * {
             margin: 0;
             padding: 0;
@@ -51,7 +51,6 @@
             padding: 0 24px;
         }
 
-        /* navigation */
         .navbar {
             position: fixed;
             top: 0;
@@ -83,6 +82,7 @@
             letter-spacing: -0.02em;
             color: white;
             text-decoration: none;
+            cursor: pointer;
         }
 
         .logo-icon {
@@ -113,6 +113,7 @@
             border-radius: 40px;
             transition: 0.2s;
             white-space: nowrap;
+            cursor: pointer;
         }
 
         .nav-links a:hover {
@@ -126,7 +127,6 @@
             gap: 16px;
         }
 
-        /* tlačítka */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -187,7 +187,6 @@
             color: var(--primary-light);
         }
 
-        /* mobilní menu */
         .mobile-menu-btn {
             display: flex;
             align-items: center;
@@ -231,7 +230,7 @@
             gap: 8px;
         }
 
-        .mobile-menu-links a {
+        .mobile-menu-links a, .mobile-menu-links button {
             display: block;
             padding: 16px 20px;
             color: var(--text-secondary);
@@ -240,14 +239,18 @@
             font-weight: 500;
             border-radius: 20px;
             transition: 0.2s;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
         }
 
-        .mobile-menu-links a:hover {
+        .mobile-menu-links a:hover, .mobile-menu-links button:hover {
             background: var(--bg-elevated);
             color: white;
         }
 
-        /* hero sekce */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -353,7 +356,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* features */
         .section-header {
             text-align: center;
             max-width: 700px;
@@ -421,7 +423,6 @@
             line-height: 1.6;
         }
 
-        /* cta */
         .cta {
             padding: 100px 24px;
             text-align: center;
@@ -449,7 +450,6 @@
             margin: 0 auto 36px;
         }
 
-        /* dashboard (pro přihlášené) */
         .dashboard {
             min-height: 100vh;
             padding: 100px 24px 40px;
@@ -519,7 +519,6 @@
             border-bottom: none;
         }
 
-        /* footer */
         .footer {
             border-top: 1px solid var(--border);
             padding: 48px 24px;
@@ -550,6 +549,7 @@
             padding: 8px 4px;
             border-radius: 20px;
             transition: 0.2s;
+            cursor: pointer;
         }
 
         .footer-links a:hover {
@@ -561,7 +561,6 @@
             font-size: 0.9rem;
         }
 
-        /* modaly */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -600,6 +599,10 @@
         }
 
         @media (min-width: 640px) {
+            .hero-buttons {
+                flex-direction: row;
+            }
+            
             .modal-overlay {
                 align-items: center;
             }
@@ -609,6 +612,28 @@
             }
             .modal-overlay.active .modal {
                 transform: scale(1);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+            .mobile-menu-btn {
+                display: none;
+            }
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .footer-container {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(4, 1fr);
             }
         }
 
@@ -627,6 +652,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            z-index: 10;
         }
 
         .modal-header {
@@ -736,7 +762,6 @@
             cursor: pointer;
         }
 
-        /* toast */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -770,35 +795,6 @@
             border-color: var(--error);
         }
 
-        /* media queries */
-        @media (min-width: 640px) {
-            .hero-buttons {
-                flex-direction: row;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .nav-links {
-                display: flex;
-            }
-            .mobile-menu-btn {
-                display: none;
-            }
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .footer-container {
-                flex-direction: row;
-                justify-content: space-between;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .features-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
@@ -818,14 +814,14 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="#" class="logo" onclick="showHome()">
+            <div class="logo" onclick="showHome()">
                 <span class="logo-icon">🔫</span>
                 guns.lol
-            </a>
+            </div>
             <ul class="nav-links">
-                <li><a href="#features" onclick="showHome()">Funkce</a></li>
-                <li><a href="#pricing" onclick="showHome()">Ceny</a></li>
-                <li><a href="#discord" onclick="showHome()">Discord</a></li>
+                <li><a onclick="showHome(); document.getElementById('features').scrollIntoView({behavior:'smooth'})">Funkce</a></li>
+                <li><a onclick="showHome()">Ceny</a></li>
+                <li><a onclick="showHome()">Discord</a></li>
             </ul>
             <div class="nav-right" id="navButtons">
                 <!-- Dynamicky se mění podle stavu přihlášení -->
@@ -839,10 +835,10 @@
     <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
         <ul class="mobile-menu-links" id="mobileMenuLinks">
-            <li><a href="#features" onclick="showHome(); toggleMobileMenu()">Funkce</a></li>
-            <li><a href="#pricing" onclick="showHome(); toggleMobileMenu()">Ceny</a></li>
-            <li><a href="#discord" onclick="showHome(); toggleMobileMenu()">Discord</a></li>
-            <li><a href="#" onclick="toggleMobileMenu(); openModal('login')">Přihlásit</a></li>
+            <li><a onclick="showHome(); document.getElementById('features').scrollIntoView({behavior:'smooth'}); toggleMobileMenu()">Funkce</a></li>
+            <li><a onclick="showHome(); toggleMobileMenu()">Ceny</a></li>
+            <li><a onclick="showHome(); toggleMobileMenu()">Discord</a></li>
+            <li><a onclick="toggleMobileMenu(); openModal('login')">Přihlásit</a></li>
             <li><button class="btn btn-primary btn-full" onclick="toggleMobileMenu(); openModal('register')">Registrovat</button></li>
         </ul>
     </div>
@@ -952,8 +948,8 @@
             </form>
             <div class="divider">nebo</div>
             <div class="social-login">
-                <button class="btn btn-social" onclick="handleSocialLogin('google')" id="googleLoginBtn">🔍 Google</button>
-                <button class="btn btn-social" onclick="handleSocialLogin('discord')" id="discordLoginBtn">💬 Discord</button>
+                <button class="btn btn-social" onclick="handleSocialLogin('google')">🔍 Google</button>
+                <button class="btn btn-social" onclick="handleSocialLogin('discord')">💬 Discord</button>
             </div>
             <div class="modal-footer">
                 Nemáte účet? <a onclick="switchModal('register')">Zaregistrujte se</a>
@@ -1032,20 +1028,20 @@
     <footer class="footer" id="mainFooter">
         <div class="footer-container">
             <div class="footer-links">
-                <a href="#help" onclick="showHome()">Nápověda</a>
-                <a href="#discord" onclick="showHome()">Discord</a>
-                <a href="#pricing" onclick="showHome()">Ceny</a>
+                <a onclick="showHome()">Nápověda</a>
+                <a onclick="showHome()">Discord</a>
+                <a onclick="showHome()">Ceny</a>
             </div>
             <div class="footer-copy">© 2025 guns.lol — dokonalý link in bio</div>
         </div>
     </footer>
 
     <script>
-        // Supabase konfigurace
+        // Opravená inicializace Supabase
         const SUPABASE_URL = 'https://rgifzfbgazqzbhbelssm.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJnaWZ6ZmJnYXpxemJoYmVsc3NtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MjI2NTgsImV4cCI6MjA4OTM5ODY1OH0.1OaEfeDNe4O5PVRH2p1cnNTOFRpFm6VBqgwmk3MMYVA';
 
-        // Inicializace Supabase klienta
+        // Inicializace Supabase klienta - opraveno pro UMD modul
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // Globální proměnné
@@ -1059,69 +1055,269 @@
         const mobileMenuLinks = document.getElementById('mobileMenuLinks');
         const mainFooter = document.getElementById('mainFooter');
 
-        // Kontrola stavu přihlášení při načtení stránky
-        window.addEventListener('load', async () => {
-            const { data: { user }, error } = await supabase.auth.getUser();
-            if (user) {
-                currentUser = user;
-                await loadUserProfile();
-                showDashboard();
-            } else {
-                showHome();
-            }
+        // Počkáme na načtení DOM a pak inicializujeme
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing...');
+            
+            // Kontrola stavu přihlášení při načtení stránky
+            checkUser();
+            
+            // Nastavení event listenerů pro formuláře
+            setupFormListeners();
         });
 
-        // Naslouchání změnám autentizace
-        supabase.auth.onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_IN' && session?.user) {
-                currentUser = session.user;
-                loadUserProfile();
-                showDashboard();
-            } else if (event === 'SIGNED_OUT') {
-                currentUser = null;
-                userLinks = [];
+        // Kontrola uživatele
+        async function checkUser() {
+            try {
+                const { data: { user }, error } = await supabase.auth.getUser();
+                if (user) {
+                    console.log('User found:', user);
+                    currentUser = user;
+                    await loadUserProfile();
+                    showDashboard();
+                } else {
+                    console.log('No user found');
+                    showHome();
+                }
+            } catch (error) {
+                console.error('Error checking user:', error);
                 showHome();
             }
-        });
+        }
+
+        // Nastavení posluchačů pro formuláře
+        function setupFormListeners() {
+            // Login form
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleLogin);
+            }
+
+            // Register form
+            const registerForm = document.getElementById('registerForm');
+            if (registerForm) {
+                registerForm.addEventListener('submit', handleRegister);
+            }
+
+            // Add link form
+            const addLinkForm = document.getElementById('addLinkForm');
+            if (addLinkForm) {
+                addLinkForm.addEventListener('submit', handleAddLink);
+            }
+        }
+
+        // Přihlášení
+        async function handleLogin(e) {
+            e.preventDefault();
+            console.log('Login form submitted');
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const errorDiv = document.getElementById('loginError');
+
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Přihlašování...';
+            errorDiv.classList.remove('show');
+
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+
+                if (error) {
+                    throw error;
+                }
+
+                console.log('Login successful:', data);
+                closeModal('login');
+                document.getElementById('loginForm').reset();
+                showToast('Úspěšně přihlášen!');
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                errorDiv.textContent = error.message || 'Chyba při přihlášení';
+                errorDiv.classList.add('show');
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Přihlásit se';
+            }
+        }
+
+        // Registrace
+        async function handleRegister(e) {
+            e.preventDefault();
+            console.log('Register form submitted');
+            
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const registerBtn = document.getElementById('registerBtn');
+            const errorDiv = document.getElementById('registerError');
+
+            registerBtn.disabled = true;
+            registerBtn.textContent = 'Vytváření účtu...';
+            errorDiv.classList.remove('show');
+
+            try {
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            username: username,
+                            full_name: username
+                        }
+                    }
+                });
+
+                if (error) {
+                    throw error;
+                }
+
+                console.log('Registration successful:', data);
+                closeModal('register');
+                document.getElementById('registerForm').reset();
+                showToast('Registrace úspěšná! Zkontrolujte svůj email.');
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                errorDiv.textContent = error.message || 'Chyba při registraci';
+                errorDiv.classList.add('show');
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'Vytvořit účet';
+            }
+        }
+
+        // Přidání odkazu
+        async function handleAddLink(e) {
+            e.preventDefault();
+            
+            if (!currentUser) {
+                showToast('Musíte být přihlášeni', 'error');
+                return;
+            }
+
+            const title = document.getElementById('linkTitle').value;
+            const url = document.getElementById('linkUrl').value;
+            const icon = document.getElementById('linkIcon').value;
+            const addLinkBtn = document.getElementById('addLinkBtn');
+
+            addLinkBtn.disabled = true;
+            addLinkBtn.textContent = 'Přidávání...';
+
+            try {
+                const newLink = {
+                    user_id: currentUser.id,
+                    title,
+                    url,
+                    icon: icon || null,
+                    position: userLinks.length,
+                    is_active: true,
+                    clicks: 0
+                };
+
+                const { data, error } = await supabase
+                    .from('user_links')
+                    .insert([newLink])
+                    .select();
+
+                if (error) throw error;
+
+                console.log('Link added:', data);
+                showToast('Odkaz byl přidán');
+                closeModal('addLink');
+                document.getElementById('addLinkForm').reset();
+                await loadUserLinks();
+                
+            } catch (error) {
+                console.error('Error adding link:', error);
+                showToast('Chyba při přidávání odkazu: ' + error.message, 'error');
+            } finally {
+                addLinkBtn.disabled = false;
+                addLinkBtn.textContent = 'Přidat odkaz';
+            }
+        }
+
+        // Sociální přihlášení
+        async function handleSocialLogin(provider) {
+            try {
+                const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: provider,
+                    options: {
+                        redirectTo: window.location.origin
+                    }
+                });
+
+                if (error) throw error;
+                
+            } catch (error) {
+                console.error('Social login error:', error);
+                showToast(`Chyba přihlášení přes ${provider}: ${error.message}`, 'error');
+            }
+        }
+
+        // Odhlášení
+        async function handleLogout() {
+            try {
+                const { error } = await supabase.auth.signOut();
+                if (error) throw error;
+                
+                showToast('Odhlášení úspěšné');
+                
+            } catch (error) {
+                console.error('Logout error:', error);
+                showToast('Chyba při odhlášení: ' + error.message, 'error');
+            }
+        }
 
         // Načtení profilu uživatele a odkazů
         async function loadUserProfile() {
             if (!currentUser) return;
 
-            // Načtení profilu z tabulky profiles
-            const { data: profile, error } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('id', currentUser.id)
-                .single();
+            try {
+                // Načtení profilu z tabulky profiles
+                const { data: profile, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
 
-            if (profile) {
-                document.getElementById('userName').textContent = profile.username || 'Uživatel';
-                document.getElementById('userEmail').textContent = currentUser.email;
+                if (profile) {
+                    document.getElementById('userName').textContent = profile.username || 'Uživatel';
+                    document.getElementById('userEmail').textContent = currentUser.email;
+                    
+                    const created = new Date(profile.created_at || currentUser.created_at);
+                    document.getElementById('memberSince').textContent = created.toLocaleDateString('cs-CZ');
+                }
+
+                // Načtení odkazů uživatele
+                await loadUserLinks();
                 
-                // Výpočet členství
-                const created = new Date(profile.created_at || currentUser.created_at);
-                document.getElementById('memberSince').textContent = created.toLocaleDateString('cs-CZ');
+            } catch (error) {
+                console.error('Error loading profile:', error);
             }
-
-            // Načtení odkazů uživatele
-            await loadUserLinks();
         }
 
         // Načtení odkazů
         async function loadUserLinks() {
             if (!currentUser) return;
 
-            const { data: links, error } = await supabase
-                .from('user_links')
-                .select('*')
-                .eq('user_id', currentUser.id)
-                .order('position', { ascending: true });
+            try {
+                const { data: links, error } = await supabase
+                    .from('user_links')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .order('position', { ascending: true });
 
-            if (links) {
-                userLinks = links;
+                if (error) throw error;
+
+                userLinks = links || [];
                 displayLinks();
                 updateStats();
+                
+            } catch (error) {
+                console.error('Error loading links:', error);
             }
         }
 
@@ -1169,155 +1365,51 @@
         async function deleteLink(linkId) {
             if (!confirm('Opravdu chcete smazat tento odkaz?')) return;
 
-            const { error } = await supabase
-                .from('user_links')
-                .delete()
-                .eq('id', linkId);
+            try {
+                const { error } = await supabase
+                    .from('user_links')
+                    .delete()
+                    .eq('id', linkId);
 
-            if (error) {
-                showToast('Chyba při mazání odkazu', 'error');
-            } else {
+                if (error) throw error;
+
                 showToast('Odkaz byl smazán');
                 await loadUserLinks();
+                
+            } catch (error) {
+                console.error('Error deleting link:', error);
+                showToast('Chyba při mazání odkazu: ' + error.message, 'error');
             }
         }
 
         // Zobrazení modalu pro přidání odkazu
         function showAddLinkModal() {
+            if (!currentUser) {
+                showToast('Musíte být přihlášeni', 'error');
+                return;
+            }
             document.getElementById('addLinkModal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
 
-        // Přidání nového odkazu
-        document.getElementById('addLinkForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
+        // Naslouchání změnám autentizace
+        supabase.auth.onAuthStateChange((event, session) => {
+            console.log('Auth state changed:', event, session);
             
-            const title = document.getElementById('linkTitle').value;
-            const url = document.getElementById('linkUrl').value;
-            const icon = document.getElementById('linkIcon').value;
-
-            const newLink = {
-                user_id: currentUser.id,
-                title,
-                url,
-                icon: icon || null,
-                position: userLinks.length,
-                is_active: true,
-                clicks: 0
-            };
-
-            const { data, error } = await supabase
-                .from('user_links')
-                .insert([newLink])
-                .select();
-
-            if (error) {
-                showToast('Chyba při přidávání odkazu', 'error');
-            } else {
-                showToast('Odkaz byl přidán');
-                closeModal('addLink');
-                document.getElementById('addLinkForm').reset();
-                await loadUserLinks();
+            if (event === 'SIGNED_IN' && session?.user) {
+                currentUser = session.user;
+                loadUserProfile();
+                showDashboard();
+            } else if (event === 'SIGNED_OUT') {
+                currentUser = null;
+                userLinks = [];
+                showHome();
             }
         });
-
-        // Přihlášení
-        document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            const loginBtn = document.getElementById('loginBtn');
-            const errorDiv = document.getElementById('loginError');
-
-            loginBtn.disabled = true;
-            loginBtn.textContent = 'Přihlašování...';
-            errorDiv.classList.remove('show');
-
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email,
-                password
-            });
-
-            if (error) {
-                errorDiv.textContent = error.message;
-                errorDiv.classList.add('show');
-                loginBtn.disabled = false;
-                loginBtn.textContent = 'Přihlásit se';
-            } else {
-                closeModal('login');
-                document.getElementById('loginForm').reset();
-                showToast('Úspěšně přihlášen!');
-            }
-        });
-
-        // Registrace
-        document.getElementById('registerForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const username = document.getElementById('registerUsername').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const registerBtn = document.getElementById('registerBtn');
-            const errorDiv = document.getElementById('registerError');
-
-            registerBtn.disabled = true;
-            registerBtn.textContent = 'Vytváření účtu...';
-            errorDiv.classList.remove('show');
-
-            const { data, error } = await supabase.auth.signUp({
-                email,
-                password,
-                options: {
-                    data: {
-                        username: username,
-                        full_name: username
-                    }
-                }
-            });
-
-            if (error) {
-                errorDiv.textContent = error.message;
-                errorDiv.classList.add('show');
-                registerBtn.disabled = false;
-                registerBtn.textContent = 'Vytvořit účet';
-            } else {
-                closeModal('register');
-                document.getElementById('registerForm').reset();
-                showToast('Registrace úspěšná! Zkontrolujte svůj email.');
-            }
-        });
-
-        // Sociální přihlášení
-        async function handleSocialLogin(provider) {
-            const btn = document.getElementById(`${provider}LoginBtn`);
-            if (btn) btn.disabled = true;
-
-            const { data, error } = await supabase.auth.signInWithOAuth({
-                provider: provider,
-                options: {
-                    redirectTo: window.location.origin
-                }
-            });
-
-            if (error) {
-                showToast(`Chyba přihlášení přes ${provider}`, 'error');
-                if (btn) btn.disabled = false;
-            }
-        }
-
-        // Odhlášení
-        async function handleLogout() {
-            const { error } = await supabase.auth.signOut();
-            if (error) {
-                showToast('Chyba při odhlášení', 'error');
-            } else {
-                showToast('Odhlášení úspěšné');
-            }
-        }
 
         // Zobrazení dashboardu
         function showDashboard() {
+            console.log('Showing dashboard');
             homePage.style.display = 'none';
             dashboard.classList.add('active');
             mainFooter.style.display = 'none';
@@ -1330,14 +1422,15 @@
             `;
             
             mobileMenuLinks.innerHTML = `
-                <li><a href="#" onclick="showHome(); toggleMobileMenu()">Domů</a></li>
-                <li><a href="#" onclick="document.getElementById('dashboard').scrollIntoView({behavior:'smooth'}); toggleMobileMenu()">Dashboard</a></li>
+                <li><a onclick="showHome(); toggleMobileMenu()">Domů</a></li>
+                <li><a onclick="document.getElementById('dashboard').scrollIntoView({behavior:'smooth'}); toggleMobileMenu()">Dashboard</a></li>
                 <li><button class="btn btn-primary btn-full" onclick="handleLogout()">Odhlásit</button></li>
             `;
         }
 
         // Zobrazení domovské stránky
         function showHome() {
+            console.log('Showing home');
             homePage.style.display = 'block';
             dashboard.classList.remove('active');
             mainFooter.style.display = 'block';
@@ -1349,10 +1442,10 @@
             `;
             
             mobileMenuLinks.innerHTML = `
-                <li><a href="#features" onclick="showHome(); toggleMobileMenu()">Funkce</a></li>
-                <li><a href="#pricing" onclick="showHome(); toggleMobileMenu()">Ceny</a></li>
-                <li><a href="#discord" onclick="showHome(); toggleMobileMenu()">Discord</a></li>
-                <li><a href="#" onclick="toggleMobileMenu(); openModal('login')">Přihlásit</a></li>
+                <li><a onclick="showHome(); document.getElementById('features').scrollIntoView({behavior:'smooth'}); toggleMobileMenu()">Funkce</a></li>
+                <li><a onclick="showHome(); toggleMobileMenu()">Ceny</a></li>
+                <li><a onclick="showHome(); toggleMobileMenu()">Discord</a></li>
+                <li><a onclick="toggleMobileMenu(); openModal('login')">Přihlásit</a></li>
                 <li><button class="btn btn-primary btn-full" onclick="toggleMobileMenu(); openModal('register')">Registrovat</button></li>
             `;
         }
@@ -1363,14 +1456,24 @@
         }
 
         function openModal(type) {
-            document.getElementById(type + 'Modal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-            document.getElementById('mobileMenu').classList.remove('active');
+            console.log('Opening modal:', type);
+            const modal = document.getElementById(type + 'Modal');
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                document.getElementById('mobileMenu').classList.remove('active');
+            } else {
+                console.error('Modal not found:', type + 'Modal');
+            }
         }
 
         function closeModal(type) {
-            document.getElementById(type + 'Modal').classList.remove('active');
-            document.body.style.overflow = '';
+            console.log('Closing modal:', type);
+            const modal = document.getElementById(type + 'Modal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
         }
 
         function switchModal(to) {
